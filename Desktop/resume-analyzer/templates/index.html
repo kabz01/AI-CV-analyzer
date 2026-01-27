@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Resume - AI Resume Analyzer{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% endblock %}
+
+{% block content %}
+        <div class="container" style="max-width: 900px; margin-top: 2rem;">
+            <header class="text-center animate-slide-down" style="margin-bottom: 3rem;">
+                <h1 class="text-gradient" style="font-size: 3rem; margin-bottom: 1rem;">
+                    <i class="fas fa-file-alt animate-wave"></i> AI Resume Analyzer
+                </h1>
+                <p class="subtitle animate-slide-up" style="font-size: 1.3rem; color: var(--text-secondary);">
+                    Upload your resume and get instant AI-powered insights
+                </p>
+            </header>
+            <div class="upload-section animate-zoom">
+                <div class="upload-box hover-lift ripple-effect interactive-card" id="uploadBox">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <h2>Drop your resume here</h2>
+                    <p>or click to browse</p>
+                    <p class="file-info">Supports PDF and DOCX files (max 16MB)</p>
+                    <input type="file" id="fileInput" accept=".pdf,.docx,.doc" hidden>
+                </div>
+
+                <div id="progressSection" class="progress-section hidden animate-slide-up">
+                    <div class="progress-bar progress-animated">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p id="progressText" class="text-center mt-3">
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Analyzing resume...
+                    </p>
+                </div>
+            </div>
+
+            <div id="resultsSection" class="results-section hidden">
+                <h2 class="animate-slide-down">📊 Comprehensive Analysis Results</h2>
+                
+                <!-- Score Cards -->
+                <div class="score-cards-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="score-card card-animate hover-glow">
+                        <div class="score-circle animate-pulse">
+                            <span class="score-value" id="scoreValue">0</span>
+                            <span class="score-label">/100</span>
+                        </div>
+                        <p>Overall Score</p>
+                    </div>
+                    
+                    <div class="score-card card-animate hover-glow" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <div class="score-circle animate-pulse">
+                            <span class="score-value" id="atsScore">0</span>
+                            <span class="score-label">/100</span>
+                        </div>
+                        <p>ATS Compatibility</p>
+                    </div>
+                </div>
+
+                <!-- Personal Information -->
+                <div class="analysis-card card-animate hover-lift interactive-card" style="margin-bottom: 1.5rem;">
+                    <h3>👤 Personal Information</h3>
+                    <div id="personalInfo"></div>
+                </div>
+
+                <!-- Main Analysis Grid -->
+                <div class="analysis-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>💼 Technical Skills</h3>
+                        <div id="skillsList" class="tags-container"></div>
+                    </div>
+
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>🤝 Soft Skills</h3>
+                        <div id="softSkillsList" class="tags-container"></div>
+                    </div>
+
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>🎓 Education</h3>
+                        <div id="educationList"></div>
+                    </div>
+
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>⏱️ Experience</h3>
+                        <p id="experienceYears" class="stat-value">0 years</p>
+                    </div>
+
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>🏢 Work History</h3>
+                        <div id="workHistoryList"></div>
+                    </div>
+
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>🏆 Certifications</h3>
+                        <div id="certificationsList"></div>
+                    </div>
+
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>🌐 Languages</h3>
+                        <div id="languagesList" class="tags-container"></div>
+                    </div>
+
+                    <div class="analysis-card card-animate hover-lift interactive-card">
+                        <h3>🚀 Projects</h3>
+                        <div id="projectsList"></div>
+                    </div>
+                </div>
+
+                <!-- Achievements Section -->
+                <div class="analysis-card card-animate hover-lift interactive-card" style="margin-top: 1.5rem;">
+                    <h3>✨ Key Achievements</h3>
+                    <div id="achievementsList"></div>
+                </div>
+
+                <!-- Recommendations Section -->
+                <div class="analysis-card card-animate hover-lift interactive-card" style="margin-top: 1.5rem; background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%); border: 2px solid var(--primary-color);">
+                    <h3>💡 AI Recommendations for Improvement</h3>
+                    <div id="recommendationsList"></div>
+                </div>
+
+                <div class="actions mt-4 animate-slide-up">
+                    <button class="btn btn-primary btn-lg ripple-effect" onclick="location.href='/dashboard'" data-tooltip="View all your analyzed resumes">
+                        <i class="fas fa-chart-line me-2"></i>View Dashboard
+                    </button>
+                    <button class="btn btn-secondary btn-lg ripple-effect" onclick="resetUpload()" data-tooltip="Upload another resume">
+                        <i class="fas fa-redo me-2"></i>Analyze Another
+                    </button>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}
