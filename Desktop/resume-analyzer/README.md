@@ -38,7 +38,7 @@ Add screenshots to an `images/` folder and reference them here, for example:
 
 These will show the upload screen, the dashboard, and a typical analysis view once you add the image files.
 *** End Patch```} ***!
-# 🎯 AI Resume Analyzer
+#  AI Resume Analyzer
 
 An intelligent resume analysis system powered by Flask, spaCy, and machine learning. Upload resumes in PDF or DOCX format and get instant AI-powered insights including skills extraction, experience estimation, education detection and overall scoring.
 
