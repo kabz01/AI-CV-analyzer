@@ -26,16 +26,6 @@ This is a Flask-based web application that lets you upload a PDF or DOC/DOCX res
 - **PDF reports**: `reportlab`
 
 
-### Screenshots
-
-Add screenshots to an `images/` folder and reference them here, for example:
-
-```markdown
-![Home page](images/home.png)
-![Dashboard](images/dashboard.png)
-![Analysis results](images/analysis.png)
-```
-
 These will show the upload screen, the dashboard, and a typical analysis view once you add the image files.
 *** End Patch```} ***!
 #  AI Resume Analyzer
